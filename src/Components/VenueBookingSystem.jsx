@@ -274,9 +274,27 @@ const VenueBookingSystem = () => {
         </div>
 
         {isBothView ? (
-          <div className="p-4 border border-gray-200 bg-gray-50 rounded-lg text-center">
-            <h3 className="font-semibold text-gray-700 mb-2">Combined View</h3>
-            <p className="text-sm text-gray-600">Please select an individual venue ('Hall 1' or 'Hall 2') to view specific time slots and make a booking.</p>
+           <div className="space-y-4 p-4 border border-blue-200 bg-blue-50 rounded-lg">
+            <h3 className="font-bold text-blue-800 text-center text-md mb-3">Daily Booking Summary</h3>
+            {venues.map(venue => {
+              const venueBookings = bookings[formatDate(selectedDate)]?.[venue] || {};
+              const slotsBooked = Object.entries(venueBookings);
+              return (
+                <div key={venue}>
+                  <p className="font-semibold text-gray-700">{venue}:</p>
+                  {slotsBooked.length > 0 ? (
+                    <ul className="list-disc list-inside pl-2 text-sm text-gray-600">
+                      {slotsBooked.map(([slot, event]) => (
+                        <li key={slot}><strong>{slot}:</strong> {event}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-sm text-green-700 font-medium pl-2">All slots available</p>
+                  )}
+                </div>
+              );
+            })}
+             {/* <p className="text-center text-xs text-gray-500 mt-4">Select an individual venue view to make a new booking.</p> */}
           </div>
         ) : (
           <div className="space-y-6">
@@ -296,7 +314,7 @@ const VenueBookingSystem = () => {
                 Select Venue
               </label>
               <div className='flex gap-5'>
-               {venues.map(venue => (
+                 {venues.map(venue => (
                     <button
                       key={venue}
                       onClick={() => handleViewChange(venue)}
@@ -305,7 +323,6 @@ const VenueBookingSystem = () => {
                       {venue}
                     </button>
                   ))}
-
               </div>
             </div>
 
